@@ -5,7 +5,7 @@ local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
 
 local Window = Library:CreateWindow({
-    Title = 'twr script',
+    Title = 'Ammo Spawner',
     Center = true,
     AutoShow = true,
     TabPadding = 8,
@@ -19,9 +19,12 @@ local Tabs = {
 
 local AmmoGroup = Tabs.Main:AddLeftGroupbox('Ammo')
 
-AmmoGroup:AddButton({
-    Text = 'AmmoSpawn',
-    Func = function()
+AmmoGroup:AddLabel('AmmoSpawn Keybind'):AddKeyPicker('AmmoSpawnKey', {
+    Default = 'None',
+    SyncToggleState = false,
+    Mode = 'Always',
+    Text = 'Ammo Spawn Keybind',
+    Callback = function()
         local ReplicatedStorage = game:GetService("ReplicatedStorage")
         local Player = game:GetService("Players").LocalPlayer
 
@@ -69,7 +72,7 @@ local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(
         FrameCounter = 0
     end
 
-    Library:SetWatermark(('idk what to put here | %s fps | %s ms'):format(
+    Library:SetWatermark(('Ammo Spawner | %s fps | %s ms'):format(
         math.floor(FPS),
         math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
     ))
@@ -77,5 +80,6 @@ end)
 
 Library:OnUnload(function()
     WatermarkConnection:Disconnect()
+    print('Unloaded!')
     Library.Unloaded = true
 end)
