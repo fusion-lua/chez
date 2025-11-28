@@ -25,13 +25,19 @@ AmmoGroup:AddButton({
         local player = game:GetService("Players").LocalPlayer
         local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         if hrp then
-            local ammoPart = workspace:WaitForChild("Ignore"):WaitForChild("Items"):WaitForChild("Ammo"):WaitForChild("AmmoBoxes")
-            local clone = ammoPart:Clone()
-            clone.Parent = workspace
-            clone.Position = hrp.Position + Vector3.new(0,5,0)
+            local ammoModel = workspace:WaitForChild("Ignore"):WaitForChild("Items"):WaitForChild("Ammo")
+            local clone = ammoModel:Clone()
+            clone.Parent = workspace.Ignore.Items
+
+            for _, child in pairs(clone:GetChildren()) do
+                if child:IsA("BasePart") then
+                    child.Position = hrp.Position
+                end
+            end
         end
     end
 })
+
 
 local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
 MenuGroup:AddButton('Unload', function() Library:Unload() end)
