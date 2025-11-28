@@ -3,6 +3,7 @@ local repo = 'https://raw.githubusercontent.com/violin-suzutsuki/LinoriaLib/main
 local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
 local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
 local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+
 local Window = Library:CreateWindow({
     Title = 'twr 😎',
     Center = true,
@@ -47,13 +48,11 @@ task.spawn(function()
             local player = game:GetService("Players").LocalPlayer
             local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
             if hrp then
-                local ammoFolder = workspace:WaitForChild("Ignore"):WaitForChild("Items"):WaitForChild("Ammo"):WaitForChild("AmmoBoxes")
-                local ammoParts = ammoFolder:GetChildren()
-                if #ammoParts > 0 then
-                    local pick = ammoParts[math.random(1, #ammoParts)]:Clone()
-                    pick.Parent = workspace
-                    pick.Position = hrp.Position + Vector3.new(0, 5, 0)
-                end
+                local ammoPart = workspace:WaitForChild("Ignore"):WaitForChild("Items"):WaitForChild("Ammo"):WaitForChild("AmmoBoxes")
+                local clone = ammoPart:Clone()
+                clone.Parent = workspace
+                clone.Position = hrp.Position + Vector3.new(0,5,0)
+                print("cloneeattempt")
             end
             task.wait(Options.SpawnInterval.Value)
         else
@@ -65,7 +64,6 @@ end)
 local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
 
 MenuGroup:AddButton('Unload', function() Library:Unload() end)
-
 MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' })
 Library.ToggleKeybind = Options.MenuKeybind
 
@@ -89,13 +87,11 @@ local FPS = 60
 
 local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(function()
     FrameCounter += 1
-
     if (tick() - FrameTimer) >= 1 then
         FPS = FrameCounter
         FrameTimer = tick()
         FrameCounter = 0
     end
-
     Library:SetWatermark(('cool twr script 😎 | %s fps | %s ms'):format(
         math.floor(FPS),
         math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
@@ -104,6 +100,5 @@ end)
 
 Library:OnUnload(function()
     WatermarkConnection:Disconnect()
-    print('Unloaded!')
     Library.Unloaded = true
 end)
